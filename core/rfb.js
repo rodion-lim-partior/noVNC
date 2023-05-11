@@ -259,7 +259,6 @@ export default class RFB extends EventTargetMixin {
             Log.Error("Display exception: " + exc);
             throw exc;
         }
-        this._display.onflush = this._onFlush.bind(this);
 
         this._clipboard = new Clipboard(this._canvas);
         this._clipboard.onpaste = this.clipboardPasteFrom.bind(this);
@@ -2480,14 +2479,6 @@ export default class RFB extends EventTargetMixin {
         }
     }
 
-    _onFlush() {
-        this._flushing = false;
-        // Resume processing
-        if (this._sock.rQlen > 0) {
-            this._handleMessage();
-        }
-    }
-
     _framebufferUpdate() {
         if (this._FBU.rects === 0) {
             if (this._sock.rQwait("FBU header", 3, 1)) { return false; }
@@ -2498,7 +2489,14 @@ export default class RFB extends EventTargetMixin {
             // to avoid building up an excessive queue
             if (this._display.pending()) {
                 this._flushing = true;
-                this._display.flush();
+                this._display.flush()
+                    .then(() => {
+                        this._flushing = false;
+                        // Resume processing
+                        if (this._sock.rQlen > 0) {
+                            this._handleMessage();
+                        }
+                    });
                 return false;
             }
         }
