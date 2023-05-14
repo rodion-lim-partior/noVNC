@@ -965,7 +965,7 @@ export default class RFB extends EventTargetMixin {
     }
 
     _handleMessage() {
-        if (this._sock.rQlen === 0) {
+        if (this._sock.rQwait("message", 1)) {
             Log.Warn("handleMessage called on an empty receive queue");
             return;
         }
@@ -982,7 +982,7 @@ export default class RFB extends EventTargetMixin {
                     if (!this._normalMsg()) {
                         break;
                     }
-                    if (this._sock.rQlen === 0) {
+                    if (this._sock.rQwait("message", 1)) {
                         break;
                     }
                 }
@@ -2493,7 +2493,7 @@ export default class RFB extends EventTargetMixin {
                     .then(() => {
                         this._flushing = false;
                         // Resume processing
-                        if (this._sock.rQlen > 0) {
+                        if (!this._sock.rQwait("message", 1)) {
                             this._handleMessage();
                         }
                     });
