@@ -1871,7 +1871,6 @@ export default class RFB extends EventTargetMixin {
                     }
                 })
                 .then(() => {
-                    this.dispatchEvent(new CustomEvent('securityresult'));
                     this._rfbInitState = "SecurityResult";
                     return true;
                 }).finally(() => {
