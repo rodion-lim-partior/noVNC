@@ -2511,6 +2511,8 @@ export default class RFB extends EventTargetMixin {
                 this._FBU.width = this._sock.rQshift16();
                 this._FBU.height = this._sock.rQshift16();
                 this._FBU.encoding = this._sock.rQshift32();
+                /* Encodings are signed */
+                this._FBU.encoding >>= 0;
             }
 
             if (!this._handleRect()) {
