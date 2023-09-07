@@ -1932,7 +1932,11 @@ export default class RFB extends EventTargetMixin {
     _negotiateAuthentication() {
         switch (this._rfbAuthScheme) {
             case securityTypeNone:
-                this._rfbInitState = 'SecurityResult';
+                if (this._rfbVersion >= 3.8) {
+                    this._rfbInitState = 'SecurityResult';
+                } else {
+                    this._rfbInitState = 'ClientInitialisation';
+                }
                 return true;
 
             case securityTypeXVP:
