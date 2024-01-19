@@ -30,7 +30,7 @@ info "Selected Desktop environment :: $desktopEnv"
 if [ -z $FORCE_KILL ]; then
     if pgrep -f novnc_proxy >/dev/null && pgrep -f vncserver >/dev/null; then
         if pgrep -fdesktopEnv $ >/dev/null; then
-            info "Virtual desktop already running on $NOVNC_PORT-$WEB_HOST/vnc.html\n"
+            info "Virtual desktop already running on $NOVNC_PORT-$WEB_HOST/vnc.html"
             exit
         fi
     fi
@@ -105,11 +105,11 @@ if lsof -t -i:$NOVNC_PORT>/dev/null; then
     kill -9 $(lsof -t -i:$NOVNC_PORT)
 fi
 
-if [ ! -z $RUN_IN_BACKGROUND ]; then
+if [ ! -z $RUN_IN_BACKGROUND ] && [ $RUN_IN_BACKGROUND -eq 1 ]; then
     info "running novnc proxy in background"
     mkdir -p ~/logs
-    ./novnc_proxy --vnc localhost:$displayPort &> ~/logs/novnc.log &
-    info "\nNavigate to this URL:\n\n$NOVNC_PORT-$WEB_HOST/vnc.html\n"
+    nohup ./novnc_proxy --vnc localhost:$displayPort &> ~/logs/novnc.log &
+    info "Navigate to this URL: $NOVNC_PORT-$WEB_HOST/vnc.html"
 else
-    ./novnc_proxy --vnc localhost:$displayPort 
+    ./novnc_proxy --vnc localhost:$displayPort
 fi
