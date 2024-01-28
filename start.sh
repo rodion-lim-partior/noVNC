@@ -90,7 +90,7 @@ if [ ! -z $display ]; then
 else
     info "no display found"
 fi
-/opt/TurboVNC/bin/vncserver -localhost -depth 24 -geometry 3440x1440
+nohup /opt/TurboVNC/bin/vncserver -localhost -depth 24 -geometry 3440x1440 -securitytypes tlsnone,x509none,none
 display=$(/opt/TurboVNC/bin/vncserver -list | grep -E "^:" | awk '{print $1}')
 displayNumber=${display/:}
 displayPort=$((5900+$displayNumber))

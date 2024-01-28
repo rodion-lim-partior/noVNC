@@ -12,3 +12,5 @@ recordings
 noVNC-*.tgz
 
 vnc/turbovnc.deb
+
+nohup.out
