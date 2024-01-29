@@ -27,9 +27,10 @@ NOVNC_PORT=6080
 
 info "Selected Desktop environment :: $desktopEnv"
 
+# If force kill is not set
 if [ -z $FORCE_KILL ]; then
     if pgrep -f novnc_proxy >/dev/null && pgrep -f vncserver >/dev/null; then
-        if pgrep -fdesktopEnv $ >/dev/null; then
+        if pgrep -f $desktopEnv >/dev/null; then
             info "Virtual desktop already running on $NOVNC_PORT-$WEB_HOST/vnc.html"
             exit
         fi
