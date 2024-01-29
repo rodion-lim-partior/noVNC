@@ -106,6 +106,8 @@ if lsof -t -i:$NOVNC_PORT>/dev/null; then
     kill -9 $(lsof -t -i:$NOVNC_PORT)
 fi
 
+unset FORCE_KILL # in case variable is persisted across sessions
+
 if [ ! -z $RUN_IN_BACKGROUND ] && [ $RUN_IN_BACKGROUND -eq 1 ]; then
     info "running novnc proxy in background"
     mkdir -p ~/logs
